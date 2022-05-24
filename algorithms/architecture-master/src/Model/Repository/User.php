@@ -1,9 +1,10 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Model\Repository;
 
+use IdentityMap;
 use Model\Entity;
 
 class User
@@ -50,13 +51,17 @@ class User
     {
         $role = $user['role'];
 
-        return new Entity\User(
+        IdentityMap::addRecord(new Entity\Role($role['id'], $role['title'], $role['role']), $role['id']);
+
+        IdentityMap::addRecord(new Entity\User(
             $user['id'],
             $user['name'],
             $user['login'],
             $user['password'],
-            new Entity\Role($role['id'], $role['title'], $role['role'])
-        );
+            IdentityMap::getRecord('Role', $role['id'])
+        ), $user['id']);
+
+        return IdentityMap::getRecord('User', $user['id']);
     }
 
     /**

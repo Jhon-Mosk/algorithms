@@ -1,15 +1,18 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Model\Repository;
 
+use IdentityMap;
 use Model\Entity;
 
 class Product
 {
     /**
      * Поиск продуктов по массиву id
+     * Добавить во все классы Repository использование паттерна Identity Map вместо постоянного
+     * генерирования сущностей.
      *
      * @param int[] $ids
      * @return Entity\Product[]
@@ -22,7 +25,9 @@ class Product
 
         $productList = [];
         foreach ($this->getDataFromSource(['id' => $ids]) as $item) {
-            $productList[] = new Entity\Product($item['id'], $item['name'], $item['price']);
+            IdentityMap::addRecord(new Entity\Product($item['id'], $item['name'], $item['price']), $item['id']);
+
+            $productList[] = IdentityMap::getRecord('Product', $item['id']);
         }
 
         return $productList;
@@ -37,7 +42,9 @@ class Product
     {
         $productList = [];
         foreach ($this->getDataFromSource() as $item) {
-            $productList[] = new Entity\Product($item['id'], $item['name'], $item['price']);
+            IdentityMap::addRecord(new Entity\Product($item['id'], $item['name'], $item['price']), $item['id']);
+
+            $productList[] = IdentityMap::getRecord('Product', $item['id']);
         }
 
         return $productList;

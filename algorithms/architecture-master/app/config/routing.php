@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * Роутер является фронт контроллером, так как через него проходят все хттп запросы
+ * Он взаимодействует с пайдж контроллерами MainController, ProductController, OrderController, UserController
+ * Плюс с классами из симфони
+ * Так же он вызывается в kernel и registry
+ */
+
 use Controller\MainController;
 use Controller\OrderController;
 use Controller\ProductController;
